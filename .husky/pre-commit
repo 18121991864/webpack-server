@@ -1,0 +1,5 @@
+yarn lint
+yarn format
+npm lint 
+npm format
+git add .
