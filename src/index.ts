@@ -1,3 +1,4 @@
+import "./config/envLoader"; // !! 确保这是文件的第一行 !!
 import express from "express";
 
 const app = express();

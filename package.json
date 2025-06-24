@@ -4,13 +4,16 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --mode production",
-    "dev": "webpack --mode development",
+   "build": "cross-env NODE_ENV=production webpack --mode production",
+    "dev": "cross-env NODE_ENV=development webpack --mode development",
     "lint": "eslint \"src/**/*.{js,ts}\"",
+    "format": "prettier --write \"src/**/*.{js,ts}\"",
     "prepare": "husky"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "knex": "^3.1.0",
+    "pg": "^8.16.2"
   },
   "devDependencies": {
     "@babel/core": "^7.27.4",
@@ -24,6 +27,8 @@
     "@typescript-eslint/eslint-plugin": "^8.35.0",
     "@typescript-eslint/parser": "^8.35.0",
     "babel-loader": "^10.0.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.5.0",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.0",

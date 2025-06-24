@@ -4,12 +4,20 @@ const NodemonPlugin = require("nodemon-webpack-plugin"); // 引入插件
 
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === "development";
+  console.log("nodeExternals()", nodeExternals());
 
   return {
     // 1. 设置为 watch 模式
     watch: isDevelopment,
     target: "node",
     externals: [nodeExternals()],
+    resolve: {
+      extensions: [".ts", ".js", ".mjs", ".json", ".cjs"],
+      alias: {
+        "@": path.resolve(__dirname, "src"),
+        db: path.resolve(__dirname, "src/db"),
+      },
+    },
 
     // 2. 入口文件不再需要 HMR 相关的代码
     entry: {
