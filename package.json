@@ -4,11 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-   "build": "cross-env NODE_ENV=production webpack --mode production",
+    "build": "cross-env NODE_ENV=production webpack --mode production",
     "dev": "cross-env NODE_ENV=development webpack --mode development",
     "lint": "eslint \"src/**/*.{js,ts}\"",
     "format": "prettier --write \"src/**/*.{js,ts}\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "knex:make": "cross-env NODE_ENV=development knex migrate:make -x ts --knexfile src/db/config.ts",
+    "knex:migrate": "cross-env NODE_ENV=development knex migrate:latest --knexfile src/db/config.ts",
+    "knex:rollback": "cross-env NODE_ENV=development knex migrate:rollback --knexfile src/db/config.ts"
   },
   "dependencies": {
     "express": "^5.1.0",
@@ -37,6 +40,7 @@
     "nodemon": "^3.1.10",
     "nodemon-webpack-plugin": "^4.8.2",
     "prettier": "^3.6.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.0",
     "webpack": "^5.99.9",
