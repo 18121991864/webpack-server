@@ -8,7 +8,7 @@ export default defineConfig([
   tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
   eslintConfigPrettier,
-  globalIgnores(["**/dist/*.js"]),
+  globalIgnores(["**/dist/*.js", "**/node_modules/*.js"]),
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
     languageOptions: { globals: globals.node },
