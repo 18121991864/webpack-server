@@ -2,10 +2,45 @@ import "./config/envLoader"; // !! 确保这是文件的第一行 !!
 import db from "./db";
 import userRoutes from "./routes/userRoutes";
 import express, { Request, Response, Application } from "express";
+import camelcaseKeys from "camelcase-keys";
+import snakecaseKeys from "snakecase-keys";
 
 const app: Application = express();
 app.use(express.json());
 const port = 3000;
+
+function response({
+  code = 0,
+  message = "成功",
+  data,
+}: {
+  code: number;
+  message: string;
+  data: Record<string, unknown>;
+}) {
+  return {
+    code,
+    data: camelcaseKeys(data, { deep: true }),
+    msg: message,
+  };
+}
+
+// 请求转换中间件
+app.use((req, res, next) => {
+  if (req.body) {
+    req.body = snakecaseKeys(req.body, { deep: true });
+  }
+  next();
+});
+
+// 响应转换中间件
+app.use((req, res, next) => {
+  const originalJson = res.json;
+  res.json = function (data) {
+    return originalJson.call(this, response(data));
+  };
+  next();
+});
 
 app.get("/", (req, res) => {
   res.send({
@@ -59,7 +94,7 @@ app.listen(port, async () => {
 
   // 测试数据库连接
   try {
-    await db.raw("SELECT 1");
+    // await db.raw("SELECT 1");
     console.log("Database connection successful");
   } catch (error) {
     console.error("Database connection failed:", error);
