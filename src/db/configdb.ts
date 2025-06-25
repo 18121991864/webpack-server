@@ -1,9 +1,9 @@
-import "../config/envLoader"; // !! 同样确保这是文件的第一行 !!
+import "../config/envLoader";
 import type { Knex } from "knex";
-
-console.log(process.env);
-
+import "dotenv/config";
+import path from "path";
 // Update this configuration object to be exposed to the CLI
+
 const config: { [key: string]: Knex.Config } = {
   development: {
     client: "pg", // 指定客户端为 PostgreSQL
@@ -15,7 +15,7 @@ const config: { [key: string]: Knex.Config } = {
       database: process.env.DB_DATABASE,
     },
     migrations: {
-      directory: "./src/db/migrations", // 指定迁移文件目录
+      directory: path.join(__dirname, "./migrations"),
       extension: "ts", // 指定迁移文件扩展名
     },
     // seeds: {
