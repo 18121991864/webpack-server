@@ -5,7 +5,7 @@ import path from "path";
 
 i18n.configure({
   locales: ["en", "zh"], // 支持的语言
-  directory: path.join(__dirname, "locales"), // 使用绝对路径指向locales目录
+  directory: path.join(__dirname, "i18n/locales"), // 使用绝对路径指向locales目录
   defaultLocale: "en",
   queryParameter: "lang", // 通过 ?lang=zh 设置语言
   autoReload: true,
