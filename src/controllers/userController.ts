@@ -2,6 +2,7 @@ import db from "../db";
 import { Request, Response } from "express";
 
 interface UserRequestData {
+  userId?: string;
   userName: string;
   userAddress?: string;
   userPhone?: string;
@@ -21,6 +22,7 @@ interface UserDBData {
 // 转换前端数据格式为数据库格式
 const convertToDBFormat = (data: UserRequestData): UserDBData => {
   return {
+    user_id: data?.userId,
     user_name: data.userName,
     user_address: data.userAddress,
     user_phone: data.userPhone,
@@ -32,6 +34,7 @@ const convertToDBFormat = (data: UserRequestData): UserDBData => {
 // 转换数据库格式为前端格式
 const convertToResponseFormat = (data: UserDBData) => {
   return {
+    userId: data?.user_id,
     userName: data.user_name,
     userAddress: data.user_address,
     userPhone: data.user_phone,
