@@ -10,7 +10,6 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
     res.status(200).json({
       code: 0,
       data: user,
-      msg: "成功",
     });
   } catch (error: unknown) {
     const err = error as Error;
@@ -25,7 +24,6 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
 export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await db("users").select("*");
-
     res.status(200).json({
       data: users,
     });

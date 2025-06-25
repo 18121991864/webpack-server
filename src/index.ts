@@ -4,29 +4,39 @@ import userRoutes from "./routes/userRoutes";
 import express, { Request, Response, Application } from "express";
 import camelcaseKeys from "camelcase-keys";
 import snakecaseKeys from "snakecase-keys";
+import i18n from "./i18n";
 
 const app: Application = express();
 app.use(express.json());
+// 初始化 i18n 中间件
+app.use(i18n.init);
 const port = 3000;
 
 function response({
   code = 0,
-  message = "成功",
+  message,
   data,
+  req,
 }: {
   code: number;
   message: string;
   data: Record<string, unknown>;
+  req: Request;
 }) {
   return {
     code,
     data: camelcaseKeys(data, { deep: true }),
-    msg: message,
+    msg: message || req.__(`code`)?.[code] || `Unknown error code: ${code}`,
   };
 }
 
 // 请求转换中间件
 app.use((req, res, next) => {
+  const lang = req.headers["language"] as string;
+
+  if (lang) {
+    req.setLocale(lang);
+  }
   if (req.body) {
     req.body = snakecaseKeys(req.body, { deep: true });
   }
@@ -37,7 +47,13 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   const originalJson = res.json;
   res.json = function (data) {
-    return originalJson.call(this, response(data));
+    return originalJson.call(
+      this,
+      response({
+        ...data,
+        req,
+      })
+    );
   };
   next();
 });
