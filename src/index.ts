@@ -21,7 +21,24 @@ app.get("/users", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+// 创建一个新路由来添加用户
+app.post("/users", async (req: Request, res: Response) => {
+  try {
+    const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+      res.status(400).json({ error: "Missing required fields" });
+      return;
+    }
+    const [newUser] = await db("users")
+      .insert({ username, email, password })
+      .returning(["id", "username", "email"]); // 返回新插入的用户信息
 
+    res.status(201).json(newUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });

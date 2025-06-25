@@ -9,9 +9,9 @@
     "lint": "eslint \"src/**/*.{js,ts}\"",
     "format": "prettier --write \"src/**/*.{js,ts}\"",
     "prepare": "husky",
-    "knex:make": "cross-env NODE_ENV=development knex migrate:make -x ts --knexfile src/db/config.ts",
-    "knex:migrate": "cross-env NODE_ENV=development knex migrate:latest --knexfile src/db/config.ts",
-    "knex:rollback": "cross-env NODE_ENV=development knex migrate:rollback --knexfile src/db/config.ts"
+    "knex:make": "cross-env NODE_ENV=development cross-env  KNEX_VALUE=true   knex migrate:make -x ts --knexfile src/db/configdb.ts",
+    "knex:migrate": "cross-env NODE_ENV=development cross-env KNEX_VALUE=true   knex migrate:latest --knexfile src/db/configdb.ts",
+    "knex:rollback": "cross-env NODE_ENV=development cross-env KNEX_VALUE=true   knex migrate:rollback --knexfile src/db/configdb.ts"
   },
   "dependencies": {
     "express": "^5.1.0",

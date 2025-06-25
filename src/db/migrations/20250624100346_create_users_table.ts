@@ -1,32 +1,25 @@
 import type { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
-  // 我们告诉 Knex 要创建一个名为 'users' 的新表
+  // 使用 knex.schema.createTable 来创建表
   return knex.schema.createTable("users", table => {
-    // 创建一个名为 'id' 的字段。
-    // .increments() 表示它是一个自增的数字。
-    // .primary() 表示它是这张表的主键。
+    // knex.increments() 会被自动翻译成 PostgreSQL 的 SERIAL 类型
     table.increments("id").primary();
-    // 创建一个名为 'username' 的字段。
-    // .string() 表示它是文本类型。
-    // .notNullable() 表示这个字段不能为空。
-    // .unique() 表示所有行的这个字段值都必须是唯一的，不能有重复的用户名。
-    table.string("username").notNullable().unique();
 
-    // 同理，创建一个 'email' 字段
-    table.string("email").notNullable().unique();
+    // .comment() 方法是 Knex 提供的，用来添加字段注释
+    table.string("username").notNullable().unique().comment("名字");
+    table.string("email").notNullable().unique().comment("邮箱");
+    table.string("password").notNullable().comment("密码");
 
-    // 创建一个 'password_hash' 字段，用来存密码
-    table.string("password_hash").notNullable();
-
-    // 这是一个非常有用的快捷方式。
-    // .timestamps(true, true) 会自动帮我们创建两个字段：
-    // 1. created_at：记录这一行数据是什么时候创建的
-    // 2. updated_at：记录这一行数据是什么时候最后更新的
+    // knex.timestamps(true, true) 会创建 created_at 和 updated_at
+    // 它会自动为 created_at 设置默认的当前时间。
+    // 对于 updated_at，Knex 会在您使用 .update() 方法时在应用层面自动更新它。
     table.timestamps(true, true);
+    // 正确的表注释方法：在回调函数内部使用 table.comment()
+    table.comment("用户表");
   });
 }
 
 export async function down(knex: Knex): Promise<void> {
-  console.log("down", knex);
+  return knex.schema.dropTable("users");
 }
