@@ -1,6 +1,8 @@
 import "../config/envLoader"; // !! 同样确保这是文件的第一行 !!
 import type { Knex } from "knex";
 
+console.log(process.env);
+
 // Update this configuration object to be exposed to the CLI
 const config: { [key: string]: Knex.Config } = {
   development: {

@@ -1,20 +1,37 @@
 import db from "../db";
 
 interface UserData {
-  username: string;
-  email: string;
-  password: string;
+  user_id?: string;
+  user_name: string;
+  user_address?: string;
+  user_phone?: string;
+  user_email: string;
+  user_password: string;
 }
 
 interface UserRecord extends UserData {
   id: number;
-  created_at?: Date;
+  create_time?: Date;
   updated_at?: Date;
 }
 
 class User {
-  static async create({ username, email, password }: UserData): Promise<UserRecord> {
-    const [user] = await db("users").insert({ username, email, password }).returning("*");
+  static async create({
+    user_name,
+    user_address,
+    user_phone,
+    user_email,
+    user_password,
+  }: UserData): Promise<UserRecord> {
+    const [user] = await db("users")
+      .insert({
+        user_name,
+        user_address,
+        user_phone,
+        user_email,
+        user_password,
+      })
+      .returning("*");
     return user;
   }
 
@@ -26,13 +43,23 @@ class User {
     return await db("users").where({ id }).first();
   }
 
+  static async findByUserId(user_id: string): Promise<UserRecord | undefined> {
+    return await db("users").where({ user_id }).first();
+  }
+
   static async update(
     id: number | string,
-    { username, email, password }: Partial<UserData>
+    { user_name, user_address, user_phone, user_email, user_password }: Partial<UserData>
   ): Promise<UserRecord | undefined> {
     const [user] = await db("users")
       .where({ id })
-      .update({ username, email, password })
+      .update({
+        user_name,
+        user_address,
+        user_phone,
+        user_email,
+        user_password,
+      })
       .returning("*");
     return user;
   }
